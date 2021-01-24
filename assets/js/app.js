@@ -1,4 +1,4 @@
-// @TODO: YOUR CODE HERE!
+
 var svgWidth = 960;
 var svgHeight = 500;
 
@@ -17,7 +17,8 @@ var svg = d3
   .append("svg")
   .attr("width", svgWidth)
   .attr("height", svgHeight);
-console.log('OK')
+
+
 var chartGroup = svg.append("g")
 .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
@@ -46,9 +47,14 @@ function renderAxes(newXScale, xAxis) {
 
 function renderCircles(circlesGroup, newXScale, chosenXAxis) {
 
-  circlesGroup.transition()
+  circlesGroup.selectAll('circle').transition()
     .duration(1000)
     .attr("cx", d => newXScale(d[chosenXAxis]));
+    circlesGroup.selectAll('text').transition()
+    .duration(1000)
+    .attr("x", d => newXScale(d[chosenXAxis])-6);
+
+
 
   return circlesGroup;
 }
@@ -76,7 +82,6 @@ function updateToolTip(chosenXAxis, circlesGroup) {
   circlesGroup.on("mouseover", function(data) {
     toolTip.show(data,this);
   })
-    // onmouseout event
     .on("mouseout", function(data, index) {
       toolTip.hide(data,this);
     });
@@ -86,10 +91,7 @@ function updateToolTip(chosenXAxis, circlesGroup) {
 
 
 
-d3.csv("assets/data/data.csv").then(function(censusData, err) {
-  if (err) throw err;
-
-  // parse data
+d3.csv("assets/data/data.csv").then(function(censusData) {
   censusData.forEach(function(data) {
     data.obesity = +data.obesity;
     data.healthcare = +data.healthcare;
@@ -122,12 +124,21 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
   var circlesGroup = chartGroup.selectAll("circle")
     .data(censusData)
     .enter()
-    .append("circle")
+    .append('g')
+
+    circlesGroup.append("circle")
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
     .attr("cy", d => yLinearScale(d.obesity))
-    .attr("r", 5)
+    .attr("r", 15)
     .attr("fill", "green")
-    .attr("opacity", ".5");
+    .attr("opacity", ".9")
+
+    circlesGroup.append('text').text(d=>d.abbr)
+    .attr('x',d => xLinearScale(d[chosenXAxis]) -6)
+    .attr('y',d => yLinearScale(d.obesity)+4)
+    .attr('stroke','white')
+    .attr("font-size", "8px");
+
 
   // Create group for two x-axis labels
   var labelsGroup = chartGroup.append("g")
