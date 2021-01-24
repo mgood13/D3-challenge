@@ -22,10 +22,17 @@ var svg = d3
 var chartGroup = svg.append("g")
 .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+
+
 var chosenXAxis = "income";
 var chosenYAxis = "obesity";
 var currentX = "income";
 var currentY = 'obesity';
+var axisXVal = "Income";
+var axisYVal = "Obesity (%)";
+
+
+var chartTitle = d3.select('.chart-title').text('Income v. Obesity (%)')
 
 function yScale(censusData, chosenYAxis) {
 
@@ -216,7 +223,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .attr("y", 40)
     .attr("value", "healthcare") // value to grab for event listener
     .classed("inactive", true)
-    .text("Healthcare");
+    .text("Lack of Healthcare (%)");
 
     var obesityLabel = labelsGroup.append("text")
     .attr("transform", "rotate(90)")
@@ -224,7 +231,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .attr("y", width/2 + 40)
     .attr("value", "obesity") // value to grab for event listener
     .classed("active", true)
-    .text("Obesity Rate");
+    .text("Obesity (%)");
 
     var ageLabel = labelsGroup.append("text")
     .attr("transform", "rotate(90)")
@@ -232,7 +239,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .attr("y", width/2 + 60)
     .attr("value", "age") // value to grab for event listener
     .classed("inactive", true)
-    .text("Age");
+    .text("Average Age");
 
 
   // updateToolTip function above csv import
@@ -243,6 +250,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .on("click", function() {
       // get value of selection
       var value = d3.select(this).attr("value");
+
 
       if (value == 'healthcare') {
 
@@ -276,6 +284,8 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 
         // changes classes to change bold text
         if (chosenXAxis === "income") {
+            axisXVal = "Income";
+
           incomeLabel
             .classed("active", true)
             .classed("inactive", false);
@@ -284,6 +294,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
             .classed("inactive", true);
         }
         else {
+            axisXVal = "Lack of Healthcare (%)";
           incomeLabel
             .classed("active", false)
             .classed("inactive", true);
@@ -292,6 +303,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
             .classed("inactive", false);
         }
         if (chosenYAxis === "obesity") {
+            axisYVal = "Obesity (%)";
           obesityLabel
             .classed("active", true)
             .classed("inactive", false);
@@ -300,6 +312,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
             .classed("inactive", true);
         }
         else {
+            axisYVal = "Average Age";
           obesityLabel
             .classed("active", false)
             .classed("inactive", true);
@@ -307,6 +320,8 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
             .classed("active", true)
             .classed("inactive", false);
         }
+
+        chartTitle = d3.select('.chart-title').text(`${axisXVal} v. ${axisYVal}`)
 
     });
 
