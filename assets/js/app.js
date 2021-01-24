@@ -51,6 +51,7 @@ function xScale(censusData, chosenXAxis) {
 
 
 function renderAxes(newXScale,newYScale, xAxis,yAxis) {
+
   var bottomAxis = d3.axisBottom(newXScale);
   var leftAxis = d3.axisLeft(newYScale)
 
@@ -66,7 +67,7 @@ function renderAxes(newXScale,newYScale, xAxis,yAxis) {
 }
 
 function renderCircles(circlesGroup, newXScale, newYScale, chosenYAxis, chosenXAxis) {
-    console.log('changing stuff')
+
   circlesGroup.selectAll('circle').transition()
     .duration(1000)
     .attr("cx", d => newXScale(d[chosenXAxis]));
@@ -74,8 +75,7 @@ function renderCircles(circlesGroup, newXScale, newYScale, chosenYAxis, chosenXA
     .duration(1000)
     .attr("x", d => newXScale(d[chosenXAxis])-6);
 
-    console.log('y: ' + chosenYAxis)
-    console.log('x: ' + chosenXAxis)
+
 
     circlesGroup.selectAll('circle').transition()
     .duration(1000)
@@ -255,19 +255,16 @@ console.log(0 - (height / 2))
         chosenYAxis = 'obesity'
         }
 
-
-
-        // console.log(chosenXAxis)
-
         // functions here found above csv import
         // updates x scale for new data
         xLinearScale = xScale(censusData, chosenXAxis);
+        yLinearScale = yScale(censusData,chosenYAxis);
         // updates x axis with transition
         xAxis,yAxis = renderAxes(xLinearScale,yLinearScale, xAxis,yAxis);
 
+
         // updates circles with new x values
         circlesGroup = renderCircles(circlesGroup, xLinearScale, yLinearScale, chosenYAxis, chosenXAxis);
-
 
         // updates tooltips with new info
         circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
@@ -305,40 +302,6 @@ console.log(0 - (height / 2))
             .classed("active", true)
             .classed("inactive", false);
         }
-
-    });
-
-    ylabelsGroup.selectAll("text")
-    .on('click',function(){
-        var yvalue = d3.select(this).attr("value");
-        console.log('HELLO?????')
-
-        if (yvalue !== chosenYAxis) {
-
-        // replaces chosenXAxis with value
-        chosenYAxis = yvalue;
-
-
-        // functions here found above csv import
-        // updates x scale for new data
-        yLinearScale = yScale(censusData, chosenYAxis);
-
-        // updates x axis with transition
-        xAxis,yAxis = renderAxes(xLinearScale,yLinearScale, xAxis,yAxis);
-
-        // updates circles with new x values
-        circlesGroup = renderCircles(circlesGroup, xLinearScale, yLinearScale, chosenYAxis, chosenXAxis);
-
-
-        // updates tooltips with new info
-        circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
-
-        // changes classes to change bold text
-
-      }
-
-
-
 
     });
 
