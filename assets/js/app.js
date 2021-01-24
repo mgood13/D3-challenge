@@ -1,29 +1,31 @@
-
+// Creating the initial size of the svg
 var svgWidth = 960;
 var svgHeight = 500;
 
+// Add a margin
 var margin = {
   top: 20,
   right: 40,
   bottom: 80,
   left: 100
 };
-
+// Create the sizes for the chart
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
+// Create an svg inside the chart object
 var svg = d3
   .select(".chart")
   .append("svg")
   .attr("width", svgWidth)
   .attr("height", svgHeight);
 
-
+// Creating the object that all our elements go into
 var chartGroup = svg.append("g")
 .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 
-
+// Create global variables for initial values
 var chosenXAxis = "income";
 var chosenYAxis = "obesity";
 var currentX = "income";
@@ -31,11 +33,13 @@ var currentY = 'obesity';
 var axisXVal = "Income";
 var axisYVal = "Obesity (%)";
 
-
+// Create the initial value of the title
 var chartTitle = d3.select('.chart-title').text('Income v. Obesity (%)')
 
+// Update the y scale based upon given values, called when an axis is clicked
 function yScale(censusData, chosenYAxis) {
 
+    // Creating a scaled y axis from the values given
   var yLinearScale = d3.scaleLinear()
     .domain([d3.min(censusData, d => d[chosenYAxis]) * 0.8,
       d3.max(censusData, d => d[chosenYAxis]) * 1.2
@@ -45,7 +49,7 @@ function yScale(censusData, chosenYAxis) {
   return yLinearScale;
 }
 
-
+// Same as the y axis but for the x
 function xScale(censusData, chosenXAxis) {
   // create scales
   var xLinearScale = d3.scaleLinear()
