@@ -131,7 +131,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .attr("cy", d => yLinearScale(d.obesity))
     .attr("r", 15)
     .attr("fill", "green")
-    .attr("opacity", ".9")
+    .attr("opacity", ".5")
 
     circlesGroup.append('text').text(d=>d.abbr)
     .attr('x',d => xLinearScale(d[chosenXAxis]) -6)
