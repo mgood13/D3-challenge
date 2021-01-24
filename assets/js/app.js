@@ -24,6 +24,8 @@ var chartGroup = svg.append("g")
 
 var chosenXAxis = "income";
 var chosenYAxis = "obesity";
+var currentX = "income";
+var currentY = 'obesity';
 
 function yScale(censusData, chosenYAxis) {
 
@@ -68,21 +70,33 @@ function renderAxes(newXScale,newYScale, xAxis,yAxis) {
 
 function renderCircles(circlesGroup, newXScale, newYScale, chosenYAxis, chosenXAxis) {
 
-  circlesGroup.selectAll('circle').transition()
+    if (chosenXAxis != currentX){
+
+    circlesGroup.selectAll('circle').transition()
     .duration(1000)
     .attr("cx", d => newXScale(d[chosenXAxis]));
     circlesGroup.selectAll('text').transition()
     .duration(1000)
     .attr("x", d => newXScale(d[chosenXAxis])-6);
 
+    currentX = chosenXAxis;
+    }
 
 
+
+    if (chosenYAxis != currentY) {
     circlesGroup.selectAll('circle').transition()
     .duration(1000)
     .attr("cy", d => newYScale(d[chosenYAxis]));
     circlesGroup.selectAll('text').transition()
     .duration(1000)
     .attr("y", d => newYScale(d[chosenYAxis])-6);
+
+    currentY = chosenYAxis;
+
+
+    }
+
 
   return circlesGroup;
 }
@@ -220,15 +234,6 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .classed("inactive", true)
     .text("Age");
 
-console.log(0 - (height / 2))
-  // append y axis
-//  chartGroup.append("text")
-//    .attr("transform", "rotate(-90)")
-//    .attr("y", 0 - margin.left)
-//    .attr("x", 0 - (height / 2))
-//    .attr("dy", "1em")
-//    .classed("axis-text", true)
-//    .text("Average Obesity Rate");
 
   // updateToolTip function above csv import
   var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
